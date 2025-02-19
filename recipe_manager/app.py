@@ -59,6 +59,12 @@ def logout():
     return redirect(url_for("home"))
 
 
+@app.route("/account")
+@login_required
+def account():
+    return render_template("account.html", user=current_user)
+
+
 with app.app_context():
     db.create_all()
 
