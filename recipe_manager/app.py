@@ -33,6 +33,13 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(100), nullable=False)
 
 
+class Recipe(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    instructions = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+
+
 @app.route("/")
 def home():
     return render_template("index.html", current_user=current_user)
@@ -64,6 +71,22 @@ def logout():
 def account():
     print(current_user)  # Debug: ดูว่ามี user หรือไม่
     return render_template("account.html", user=current_user)
+
+
+@app.route("/add_recipe", methods=["GET", "POST"])
+@login_required
+def add_recipe():
+    if request.method == "POST":
+        recipe_name = request.form["name"]
+        instructions = request.form["instructions"]
+        new_recipe = Recipe(
+            name=recipe_name, instructions=instructions, user_id=current_user.id
+        )
+        db.session.add(new_recipe)
+        db.session.commit()
+        flash("เพิ่มสูตรอาหารสำเร็จ!", "success")
+        return redirect(url_for("home"))
+    return render_template("add_recipe.html")
 
 
 with app.app_context():

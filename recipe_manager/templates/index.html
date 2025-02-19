@@ -69,12 +69,37 @@
             color: #6d4c41;
             margin-top: 80px;
         }
+
+        .add-btn {
+            position: absolute;
+            top: 10px;
+            /* อยู่ขอบบน */
+            left: 50%;
+            /* อยู่ตรงกลาง */
+            transform: translateX(-50%);
+            /* ทำให้แน่ใจว่าตรงกลาง */
+            color: #8d6e63;
+            text-decoration: none;
+            font-size: 24px;
+            /* ปรับขนาดฟอนต์ให้เหมาะสม */
+            font-weight: bold;
+            background-color: #f5e1c8;
+            padding: 5px 8px;
+            border-radius: 20%;
+            border: 2px solid black;
+            line-height: 1;
+        }
+
+        .add-btn:hover {
+            background-color: lightgray;
+        }
     </style>
 </head>
 
 <body>
 
     <div class="navbar">
+        <a href="{{ url_for('add_recipe') }}" class="add-btn">+</a>
         {% if current_user.is_authenticated %}
         <a href="{{ url_for('account') }}" class="btn btn-info">Account</a>
         <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
