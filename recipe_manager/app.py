@@ -62,6 +62,7 @@ def logout():
 @app.route("/account")
 @login_required
 def account():
+    print(current_user)  # Debug: ดูว่ามี user หรือไม่
     return render_template("account.html", user=current_user)
 
 
