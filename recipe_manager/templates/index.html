@@ -121,6 +121,25 @@
 
     <h1>Hello, Recipe Manager!</h1>
 
+    <div class="container mt-4">
+        <h2>รายการสูตรอาหาร</h2>
+        {% if recipes %}
+        {% for recipe in recipes %}
+        <div class="card mb-3" style="width: 400px;">
+            <div class="card-body">
+                <h5 class="card-title">{{ recipe.name }}</h5>
+                <a href="{{ url_for('view_recipe', recipe_id=recipe.id) }}" class="btn btn-primary">
+                    ดูสูตรอาหาร
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>ยังไม่มีสูตรอาหาร</p>
+        {% endif %}
+    </div>
+
+
 </body>
 
 </html>
