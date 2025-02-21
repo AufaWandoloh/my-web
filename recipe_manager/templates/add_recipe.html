@@ -11,12 +11,16 @@
 <body style="background-color: #f5e1c8;" class="d-flex justify-content-center align-items-center vh-100">
     <div class="card p-4">
         <h2 class="text-center">เพิ่มสูตรอาหาร</h2>
-        <form action="/add_recipe" method="POST">
+        <form action="/add_recipe" method="POST" enctype="multipart/form-data">
             <div class="mb-3">
                 <input type="text" class="form-control" name="name" placeholder="ชื่อเมนู" required>
             </div>
             <div class="mb-3">
                 <textarea class="form-control" name="instructions" placeholder="วิธีทำ" rows="5" required></textarea>
+            </div>
+            <div class="mb-3">
+                <input type="file" class="form-control" name="image" accept="image/*" required>
+                <small class="form-text text-muted">กรุณาเลือกไฟล์รูปภาพเท่านั้น</small>
             </div>
             <button type="submit" class="btn btn-success w-100">บันทึก</button>
         </form>
