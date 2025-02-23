@@ -13,7 +13,6 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
             margin: 0;
         }
@@ -68,7 +67,16 @@
             font-size: 3rem;
             font-weight: bold;
             color: #6d4c41;
-            margin-top: -430px;
+            margin-top: 125px;
+            /* ปรับค่า margin-top เพื่อขยับข้อความลงมา */
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #6d4c41;
+            margin-top: 10px;
+            /* ปรับค่า margin-top เพื่อขยับข้อความลงมา */
         }
 
         .add-btn {
@@ -105,6 +113,13 @@
         .add-btn:hover {
             background-color: #6d4c41;
         }
+
+        .content {
+            margin-top: 200px;
+            /* ปรับค่า margin-top เพื่อให้เนื้อหาอยู่ใต้ข้อความ "Hello, Recipe Manager!" */
+            width: 100%;
+            max-width: 800px;
+        }
     </style>
 </head>
 
@@ -121,7 +136,7 @@
 
     <h1>Hello, Recipe Manager!</h1>
 
-    <div class="container mt-4">
+    <div class="content container mt-4">
         <h2>รายการสูตรอาหาร</h2>
         {% if recipes %}
         <ul class="list-group">
