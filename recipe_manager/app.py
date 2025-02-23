@@ -68,20 +68,16 @@ def create_recipe_html(recipe):
 
 @app.route("/")
 def home():
-    recipes = []
-    recipes_folder = os.path.join(app.root_path, "templates", "recipes")
-    for filename in os.listdir(recipes_folder):
-        if filename.endswith(".html"):
-            recipe_id = filename.split("_")[1].split(".")[0]
-            recipe = Recipe.query.get(recipe_id)
-            if recipe:
-                recipes.append(
-                    {
-                        "name": recipe.name,
-                        "link": url_for("view_recipe", recipe_id=recipe.id),
-                    }
-                )
-    return render_template("index.html", recipes=recipes)
+    recipes = Recipe.query.all()
+    recipe_list = []
+    for recipe in recipes:
+        recipe_list.append(
+            {
+                "name": recipe.name,
+                "link": url_for("view_recipe", recipe_id=recipe.id),
+            }
+        )
+    return render_template("index.html", recipes=recipe_list)
 
 
 @app.route("/recipe/<int:recipe_id>")
