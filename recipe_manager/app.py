@@ -60,8 +60,8 @@ class User(db.Model, UserMixin):
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
+    ingredients = db.Column(db.Text, nullable=False)
     instructions = db.Column(db.Text, nullable=False)
-    image_filename = db.Column(db.String(100), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
 
@@ -82,6 +82,8 @@ def create_recipe_html(recipe):
 <body style="background-color: #f5e1c8;" class="d-flex justify-content-center align-items-center vh-100">
     <div class="card p-4" style="width: 500px;">
         <h2 class="text-center">{recipe.name}</h2>
+        <p><strong>วัตถุดิบ:</strong></p>
+        <p>{recipe.ingredients}</p>
         <p><strong>วิธีทำ:</strong></p>
         <p>{recipe.instructions}</p>
         <div class="mt-3 text-center">
@@ -164,10 +166,12 @@ def account():
 def add_recipe():
     if request.method == "POST":
         recipe_name = request.form["name"]
+        ingredients = request.form["ingredients"]
         instructions = request.form["instructions"]
 
         new_recipe = Recipe(
             name=recipe_name,
+            ingredients=ingredients,
             instructions=instructions,
             user_id=current_user.id,
         )
