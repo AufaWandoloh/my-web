@@ -50,7 +50,8 @@
             transform: translateX(-50%) scale(1.1);
         }
 
-        .account-btn {
+        .account-btn,
+        .login-btn {
             background-color: #8d6e63;
             color: white;
             padding: 8px 15px;
@@ -61,7 +62,8 @@
             transition: 0.3s;
         }
 
-        .account-btn:hover {
+        .account-btn:hover,
+        .login-btn:hover {
             background-color: #6d4c41;
             transform: scale(1.05);
         }
@@ -121,7 +123,7 @@
         {% if current_user.is_authenticated %}
         <a href="{{ url_for('account') }}" class="btn account-btn">Account</a>
         {% else %}
-        <a href="{{ url_for('login') }}" class="btn btn-success">Login</a>
+        <a href="{{ url_for('login') }}" class="btn login-btn">Login</a>
         {% endif %}
     </div>
 
