@@ -20,12 +20,13 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-recipes_folder = os.path.join(app.root_path, "templates", "recipes")
+recipes_folder = os.path.join(os.getcwd(), "templates", "recipes")
 if not os.path.exists(recipes_folder):
     os.makedirs(recipes_folder)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
 app.config["SECRET_KEY"] = "your_secret_key"
+app.config["UPLOAD_FOLDER"] = "static/uploads"
 app.config["ALLOWED_EXTENSIONS"] = {"png", "jpg"}
 
 db = SQLAlchemy(app)
@@ -61,7 +62,6 @@ class Recipe(db.Model):
     instructions = db.Column(db.Text, nullable=False)
     image_filename = db.Column(db.String(100), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    user = db.relationship("User", backref="recipes")
 
 
 def create_recipe_html(recipe):
@@ -83,7 +83,6 @@ def create_recipe_html(recipe):
         <h2 class="text-center">{recipe.name}</h2>
         <p><strong>วิธีทำ:</strong></p>
         <p>{recipe.instructions}</p>
-        {f'<div class="text-center"><img src="/static/uploads/{recipe.image_filename}" class="img-fluid" alt="Recipe Image"></div>' if recipe.image_filename else ''}
         <div class="mt-3 text-center">
             <a href="/" class="btn btn-primary">กลับหน้าแรก</a>
         </div>
@@ -95,14 +94,13 @@ def create_recipe_html(recipe):
 
 @app.route("/")
 def home():
-    recipes = Recipe.query.all()
-    return render_template("index.html", recipes=recipes)
+    return render_template("index.html", current_user=current_user)
 
 
 @app.route("/recipe/<int:recipe_id>")
 def view_recipe(recipe_id):
     recipe = Recipe.query.get_or_404(recipe_id)
-    return render_template(f"recipes/recipe_{recipe.id}.html")
+    return render_template(f"recipes/recipe_{recipe.id}.html", recipe=recipe)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -143,6 +141,7 @@ def logout():
 @app.route("/account")
 @login_required
 def account():
+    print(current_user)  # Debug: ดูว่ามี user หรือไม่
     return render_template("account.html", user=current_user)
 
 
@@ -153,22 +152,9 @@ def add_recipe():
         recipe_name = request.form["name"]
         instructions = request.form["instructions"]
 
-        if "image" not in request.files:
-            flash("กรุณาเลือกรูปภาพ", "danger")
-            return redirect(request.url)
-        file = request.files["image"]
-
-        if file and allowed_file(file.filename):
-            filename = file.filename
-            file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-        else:
-            flash("ประเภทไฟล์ไม่ถูกต้อง", "danger")
-            return redirect(request.url)
-
         new_recipe = Recipe(
             name=recipe_name,
             instructions=instructions,
-            image_filename=filename,
             user_id=current_user.id,
         )
         db.session.add(new_recipe)

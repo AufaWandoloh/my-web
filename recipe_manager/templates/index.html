@@ -13,11 +13,9 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: center;
             margin: 0;
-            padding-top: 200px;
-            /* เพิ่ม padding-top เพื่อให้เนื้อหาถอยลงมาเยอะขึ้น */
         }
 
         .navbar {
@@ -70,8 +68,7 @@
             font-size: 3rem;
             font-weight: bold;
             color: #6d4c41;
-            margin-top: 20px;
-            /* ปรับ margin-top เพื่อให้เนื้อหาถอยลงมา */
+            margin-top: -430px;
         }
 
         .add-btn {
@@ -125,20 +122,23 @@
     <h1>Hello, Recipe Manager!</h1>
 
     <div class="container mt-4">
-        <h3 class="text-center">สูตรอาหารล่าสุด</h3>
-        <div class="row">
-            {% for recipe in recipes %}
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">{{ recipe.name }}</h5>
-                        <a href="{{ url_for('view_recipe', recipe_id=recipe.id) }}" class="btn btn-primary">ดูสูตร</a>
-                    </div>
-                </div>
+        <h2>รายการสูตรอาหาร</h2>
+        {% if recipes %}
+        {% for recipe in recipes %}
+        <div class="card mb-3" style="width: 400px;">
+            <div class="card-body">
+                <h5 class="card-title">{{ recipe.name }}</h5>
+                <a href="{{ url_for('view_recipe', recipe_id=recipe.id) }}" class="btn btn-primary">
+                    ดูสูตรอาหาร
+                </a>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
+        {% else %}
+        <p>ยังไม่มีสูตรอาหาร</p>
+        {% endif %}
     </div>
+
 
 </body>
 
