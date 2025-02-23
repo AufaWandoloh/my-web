@@ -114,7 +114,7 @@ def home():
 @app.route("/recipe/<int:recipe_id>")
 def view_recipe(recipe_id):
     recipe = Recipe.query.get_or_404(recipe_id)
-    return render_template("recipe_detail.html", recipe=recipe)
+    return render_template(f"recipes/recipe_{recipe.id}.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
