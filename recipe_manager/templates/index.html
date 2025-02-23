@@ -28,69 +28,14 @@
             align-items: center;
         }
 
-        .nav-right {
-            position: absolute;
-            right: 20px;
-            top: 10px;
-        }
-
-        .nav-right a {
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: bold;
-            padding: 8px 15px;
-            border-radius: 5px;
-        }
-
-        .login-btn {
-            background-color: #2e7d32;
-            /* สีเขียวเข้ม */
-        }
-
-        .login-btn:hover {
-            background-color: #1b5e20;
-            /* เขียวเข้มขึ้น */
-        }
-
-        .logout-btn {
-            background-color: #b71c1c;
-            /* สีแดงเลือดหมู */
-        }
-
-        .logout-btn:hover {
-            background-color: #7f0000;
-            /* แดงเข้มขึ้น */
-        }
-
-        h1 {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #6d4c41;
-            margin-top: 125px;
-            /* ปรับค่า margin-top เพื่อขยับข้อความลงมา */
-        }
-
-        h2 {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #6d4c41;
-            margin-top: 10px;
-            /* ปรับค่า margin-top เพื่อขยับข้อความลงมา */
-        }
-
         .add-btn {
             position: absolute;
             top: 10px;
-            /* อยู่ขอบบน */
             left: 50%;
-            /* อยู่ตรงกลาง */
             transform: translateX(-50%);
-            /* ทำให้แน่ใจว่าตรงกลาง */
             color: #8d6e63;
             text-decoration: none;
             font-size: 24px;
-            /* ปรับขนาดฟอนต์ให้เหมาะสม */
             font-weight: bold;
             background-color: #f5e1c8;
             padding: 5px 8px;
@@ -101,24 +46,57 @@
 
         .account-btn {
             background-color: #8d6e63;
-            /* เปลี่ยนเป็นสีน้ำตาล */
             color: white;
-            /* ตัวอักษรสีขาว */
             padding: 8px 15px;
             border-radius: 5px;
             text-decoration: none;
             font-weight: bold;
         }
 
-        .add-btn:hover {
-            background-color: #6d4c41;
+        h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #6d4c41;
+            margin-top: 125px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #6d4c41;
+            margin-top: 10px;
         }
 
         .content {
             margin-top: 200px;
-            /* ปรับค่า margin-top เพื่อให้เนื้อหาอยู่ใต้ข้อความ "Hello, Recipe Manager!" */
             width: 100%;
             max-width: 800px;
+        }
+
+        .recipe-item {
+            background: none;
+            border: none;
+            padding: 0;
+            margin-bottom: 10px;
+        }
+
+        .recipe-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: white;
+            padding: 14px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .recipe-btn:hover {
+            background: linear-gradient(135deg, #e65100, #bf360c);
+            transform: scale(1.05);
         }
     </style>
 </head>
@@ -141,8 +119,8 @@
         {% if recipes %}
         <ul class="list-group">
             {% for recipe in recipes %}
-            <li class="list-group-item">
-                <a href="{{ recipe.link }}" class="btn btn-primary w-100">{{ recipe.name }}</a>
+            <li class="list-group-item recipe-item">
+                <a href="{{ recipe.link }}" class="recipe-btn">{{ recipe.name }}</a>
             </li>
             {% endfor %}
         </ul>
