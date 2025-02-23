@@ -54,36 +54,16 @@ class Recipe(db.Model):
     ingredients = db.Column(db.Text, nullable=False)
     instructions = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    user = db.relationship("User", backref=db.backref("recipes", lazy=True))
 
 
 def create_recipe_html(recipe):
     template_path = os.path.join(
         app.root_path, "templates", "recipes", f"recipe_{recipe.id}.html"
     )
+    rendered_html = render_template("recipe_detail.html", recipe=recipe)
     with open(template_path, "w", encoding="utf-8") as file:
-        file.write(
-            f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{recipe.name}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body style="background-color: #f5e1c8;" class="d-flex justify-content-center align-items-center vh-100">
-    <div class="card p-4" style="width: 500px;">
-        <h2 class="text-center">{recipe.name}</h2>
-        <p><strong>วัตถุดิบ:</strong></p>
-        <p>{recipe.ingredients}</p>
-        <p><strong>วิธีทำ:</strong></p>
-        <p>{recipe.instructions}</p>
-        <div class="mt-3 text-center">
-            <a href="/" class="btn btn-primary">กลับหน้าแรก</a>
-        </div>
-    </div>
-</body>
-</html>"""
-        )
+        file.write(rendered_html)
 
 
 @app.route("/")
@@ -173,6 +153,20 @@ def add_recipe():
         flash("เพิ่มสูตรอาหารสำเร็จ!", "success")
         return redirect(url_for("home"))
     return render_template("add_recipe.html")
+
+
+@app.route("/delete_recipe/<int:recipe_id>", methods=["POST"])
+@login_required
+def delete_recipe(recipe_id):
+    recipe = Recipe.query.get_or_404(recipe_id)
+    if recipe.user_id != current_user.id:
+        flash("คุณไม่มีสิทธิ์ลบสูตรอาหารนี้", "danger")
+        return redirect(url_for("home"))
+
+    db.session.delete(recipe)
+    db.session.commit()
+    flash("ลบสูตรอาหารสำเร็จ!", "success")
+    return redirect(url_for("home"))
 
 
 with app.app_context():
