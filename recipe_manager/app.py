@@ -163,6 +163,13 @@ def delete_recipe(recipe_id):
         flash("คุณไม่มีสิทธิ์ลบสูตรอาหารนี้", "danger")
         return redirect(url_for("home"))
 
+    # ลบไฟล์ HTML ที่เกี่ยวข้อง
+    template_path = os.path.join(
+        app.root_path, "templates", "recipes", f"recipe_{recipe.id}.html"
+    )
+    if os.path.exists(template_path):
+        os.remove(template_path)
+
     db.session.delete(recipe)
     db.session.commit()
     flash("ลบสูตรอาหารสำเร็จ!", "success")
