@@ -16,15 +16,6 @@ from flask_migrate import Migrate
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = "static/uploads"
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
-
-recipes_folder = os.path.join(os.getcwd(), "templates", "recipes")
-if not os.path.exists(recipes_folder):
-    os.makedirs(recipes_folder)
-
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
 app.config["SECRET_KEY"] = "your_secret_key"
 app.config["UPLOAD_FOLDER"] = "static/uploads"
@@ -157,7 +148,6 @@ def logout():
 @app.route("/account")
 @login_required
 def account():
-    print(current_user)  # Debug: ดูว่ามี user หรือไม่
     return render_template("account.html", user=current_user)
 
 
