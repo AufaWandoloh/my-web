@@ -1,4 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, request, flash
+from markupsafe import Markup
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import (
     LoginManager,
@@ -94,13 +95,26 @@ def create_recipe_html(recipe):
 
 @app.route("/")
 def home():
-    return render_template("index.html", current_user=current_user)
+    recipes = []
+    recipes_folder = os.path.join(app.root_path, "templates", "recipes")
+    for filename in os.listdir(recipes_folder):
+        if filename.endswith(".html"):
+            recipe_id = filename.split("_")[1].split(".")[0]
+            recipe = Recipe.query.get(recipe_id)
+            if recipe:
+                recipes.append(
+                    {
+                        "name": recipe.name,
+                        "link": url_for("view_recipe", recipe_id=recipe.id),
+                    }
+                )
+    return render_template("index.html", recipes=recipes)
 
 
 @app.route("/recipe/<int:recipe_id>")
 def view_recipe(recipe_id):
     recipe = Recipe.query.get_or_404(recipe_id)
-    return render_template(f"recipes/recipe_{recipe.id}.html", recipe=recipe)
+    return render_template("recipe_detail.html", recipe=recipe)
 
 
 @app.route("/login", methods=["GET", "POST"])
